@@ -31,27 +31,28 @@ El proyecto forma parte de una evaluación académica de la asignatura **Desarro
 
 ## 🗂️ Estructura del proyecto
 
+```text
 EVA1/
-│
-├── app/
-│   ├── (tabs)/               # Pantallas con navegación tipo tabs
-│   │   ├── _layout.tsx       # Layout principal de pestañas
-│   │   ├── index.tsx         # Pantalla principal
-│   │   └── explore.tsx       # Pantalla secundaria
-│   │
-│   ├── _layout.tsx           # Layout global de la app
-│   ├── login.tsx             # Pantalla de Login
-│   ├── modal.tsx             # Pantalla Modal
-│
-├── components/               # Componentes reutilizables (UI)
-├── constants/                # Colores, temas, variables globales
-├── assets/                   # Imágenes y recursos estáticos
-├── scripts/                  # Scripts adicionales
-│
-├── package.json              # Dependencias y configuración
-├── app.json                  # Configuración de Expo
-├── tsconfig.json             # Configuración de TypeScript
-└── README.md                 # Este documento
+  app/
+    (tabs)/                 # Pantallas con navegación tipo tabs
+      _layout.tsx           # Layout principal de pestañas
+      index.tsx             # Pantalla principal
+      explore.tsx           # Pantalla secundaria
+
+    _layout.tsx             # Layout global de la app
+    login.tsx               # Pantalla de Login
+    modal.tsx               # Pantalla Modal
+
+  components/               # Componentes reutilizables (UI)
+  constants/                # Colores, temas, variables globales
+  assets/                   # Imágenes y recursos estáticos
+  scripts/                  # Scripts adicionales
+
+  package.json              # Dependencias y configuración
+  app.json                  # Configuración de Expo
+  tsconfig.json             # Configuración de TypeScript
+  README.md                 # Este documento
+```
 
 ---
 
