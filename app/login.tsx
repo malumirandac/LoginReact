@@ -58,20 +58,20 @@ export default function LoginScreen() {
 
     return (
         <View style={styles.container}>
-            <Text>Login Screen</Text>
+            <Text>L O G I N</Text>
             <View style={styles.inputContainer}>
-                <Text style={styles.label}>Username:</Text>
+                <Text style={styles.label}>Username</Text>
                 <TextInput 
                 style={styles.input} 
-                placeholder="Username" 
+                placeholder="Enter username" 
                 onChangeText={handleUsernameChange} 
                 />
             </View>
             <View style={styles.inputContainer}>
-                <Text style={styles.label}>Password:</Text>
+                <Text style={styles.label}>Password</Text>
                 <TextInput 
                 style={styles.input} 
-                placeholder="Password" 
+                placeholder="Enter password" 
                 secureTextEntry 
                 onChangeText={handlePasswordChange}
                 />
@@ -98,6 +98,8 @@ const styles = StyleSheet.create({
     },
     label: {
         marginTop: 8,
+        color: "#ff00f2ff",
+        fontWeight: 'bold',
     },
     input: {
         height: 40,
@@ -106,6 +108,8 @@ const styles = StyleSheet.create({
         marginTop: 8,
         paddingHorizontal: 10,
         width: '100%',
+        borderRadius: 5,
+        color: 'gray',
     },
     button: {
         marginTop: 20,
@@ -118,6 +122,7 @@ const styles = StyleSheet.create({
     buttonText: {
         color: '#FFFFFF',
         textAlign: 'center',
+        fontWeight: 'bold',
     },
 })
 

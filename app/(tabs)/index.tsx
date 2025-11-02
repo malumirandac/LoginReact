@@ -15,7 +15,7 @@ const handleLogout = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>Hello, World!</Text>
-      <Text> Hola, {user?.name}</Text>
+      <Text> Bienvenido, {user?.name}</Text>
         <Link href="/modal" style={styles.button}>
       <Text style={styles.buttonText}>Open Modal</Text>
         </Link>
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 20,
     padding: 10,
-    backgroundColor: '#007AFF',
+    backgroundColor: '#ff00f2ff',
     borderRadius: 5,
   },
   headerText: {
