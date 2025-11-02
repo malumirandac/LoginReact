@@ -17,6 +17,8 @@ interface AuthContextProps {
 const EXPECTED_USERS = [
     { id: '1', name: 'user', password: '1234'},
     { id: '2', name: 'admin', password: 'admin'},
+    { id: '3', name: 'malu', password: 'malu123'},
+    { id: '4', name: 'boris', password: 'boris123'},
 ]
 
 //este es el estado inicial del contexto, donde se indica que tendrá una interfaz AuthContextProps o nada

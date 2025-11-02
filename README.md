@@ -5,18 +5,18 @@ El proyecto forma parte de una evaluación académica de la asignatura **Desarro
 
 ---
 
-## 🚀 Características principales
+## Características principales
 
 - Pantalla de **login funcional** con validación local de usuario y contraseña.  
 - Diseño adaptable a **plataformas web y móviles** (Expo Web / Android).  
 - Navegación estructurada mediante **Expo Router**.  
 - Manejo de autenticación con **Context API**.  
 - Estilos personalizados con `StyleSheet` (borde dinámico, colores y diseño centrado).  
-- Compatible con el flujo de trabajo de **Expo CLI** y **VS Code**.
+- Compatible con el flujo de trabajo de **Expo CLI**, **Android Studio** y **VS Code**.
 
 ---
 
-## 🧩 Tecnologías utilizadas
+## Tecnologías utilizadas
 
 | Tecnología | Uso principal |
 |-------------|----------------|
@@ -26,10 +26,11 @@ El proyecto forma parte de una evaluación académica de la asignatura **Desarro
 | **React Navigation (Expo Router)** | Navegación entre pantallas |
 | **Context API** | Manejo de sesión (login/logout) |
 | **Git & GitHub** | Control de versiones y repositorio remoto |
+| **Android Studio + Emulador** | Pruebas en entorno Android virtual |
 
 ---
 
-## 🗂️ Estructura del proyecto
+## Estructura del proyecto
 
 ```text
 EVA1/
@@ -56,19 +57,25 @@ EVA1/
 
 ---
 
-## ⚙️ Instalación y ejecución
+## Instalación y ejecución
 
 ### 1️⃣ Clonar el repositorio
+```bash
 git clone https://github.com/malumirandac/LoginReact.git
 cd LoginReact
+```
 
 ### 2️⃣ Instalar dependencias
+```bash
 npm install
+```
 
 ### 3️⃣ Iniciar la aplicación
+```bash
 npx expo start
+```
 
-Esto abrirá el panel de Expo en tu navegador.  
+Esto abrirá el panel de **Expo** en tu navegador.  
 
 Desde ahí puedes:
 - Presionar **w** para ejecutar la app en modo **web**.  
@@ -76,16 +83,46 @@ Desde ahí puedes:
 
 ---
 
-## 🧠 Credenciales de prueba
+## Emulación en Android
+
+La aplicación fue probada en un **emulador Android** creado con **Android Studio**, y ejecutado directamente desde **Visual Studio Code** mediante la extensión **"Android iOS Emulator"**.  
+
+Para iniciar el proyecto y abrirlo en el emulador se utiliza:
+
+```bash
+npx expo start
+```
+
+Luego, con el emulador ya encendido, se presiona la tecla:
+```bash
+a
+```
+Esto lanza la aplicación automáticamente dentro del entorno Android virtual.
+
+---
+
+## Detalles técnicos de la emulación
+
+- **Plataforma utilizada:** Android Studio (Virtual Device Manager)  
+- **Extensión en VSCode:** *Android iOS Emulator*  
+- **Comando de ejecución:** `npx expo start` + `a`  
+- **Framework:** Expo + React Native  
+- **Resultado:** la aplicación abre correctamente en el dispositivo virtual Android, mostrando primero la pantalla de login.
+
+---
+
+## Credenciales de prueba
 
 Usuario | Contraseña
 ---------|------------
 user | 1234
 admin | admin
+malu | malu123
+boris | boris123
 
 ---
 
-## 🧩 Lógica principal
+## Lógica principal
 
 - Las credenciales se validan en memoria mediante un arreglo `EXPECTED_USERS`.  
 - Si los datos son correctos, se actualiza el contexto global (`AuthContext`) con la información del usuario.  
@@ -93,7 +130,7 @@ admin | admin
 
 ---
 
-## 🎨 Estilos
+## Estilos
 
 - Implementados con **StyleSheet**.  
 - Borde de input personalizable (rosa/morado según estado).  
@@ -102,7 +139,26 @@ admin | admin
 
 ---
 
-## 🧰 Scripts útiles
+## Video demostrativo
+
+Puedes ver el funcionamiento de la aplicación en el siguiente video:
+
+[![Ver video de demostración](https://ipciisa-my.sharepoint.com/:v:/g/personal/francisca_miranda_cortes_estudiante_ipss_cl/EYnT2TJHjoZEtYa0nkH6pCQBYuSebrOzpXO2BB-PySTsRw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=iXa19d)]
+
+
+---
+
+## Capturas de pantalla
+
+| Pantalla | Descripción |
+|-----------|--------------|
+| ![Login Screen](assets/screens/pantalla_login.png) | Pantalla inicial de Login |
+| ![Tabs Screen](assets/screens/pantalla_menu.png) | Menú principal con pestañas |
+| ![Modal Screen](assets/screens/pantalla_modal.png) | Pantalla de Modal |
+
+---
+
+## Scripts útiles
 
 Comando | Descripción
 ---------|-------------
@@ -113,7 +169,7 @@ git push | Sube los cambios a GitHub
 
 ---
 
-## 🧾 Autor
+## Autor
 
 **Malú Miranda Cortés**  
 Estudiante del **Instituto Profesional San Sebastián**  
@@ -122,7 +178,7 @@ Asignatura: *Desarrollo de Aplicaciones Móviles*
 
 ---
 
-## 📄 Licencia
+## Licencia
 
 Este proyecto se distribuye con fines educativos.  
 El código puede ser reutilizado o modificado con fines académicos o de aprendizaje.
