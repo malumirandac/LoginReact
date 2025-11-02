@@ -143,18 +143,20 @@ boris | boris123
 
 Puedes ver el funcionamiento de la aplicación en el siguiente video:
 
-[![Ver video de demostración](https://ipciisa-my.sharepoint.com/:v:/g/personal/francisca_miranda_cortes_estudiante_ipss_cl/EYnT2TJHjoZEtYa0nkH6pCQBYuSebrOzpXO2BB-PySTsRw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=iXa19d)]
+[Ver video de demostración](https://ipciisa-my.sharepoint.com/:v:/g/personal/francisca_miranda_cortes_estudiante_ipss_cl/EYnT2TJHjoZEtYa0nkH6pCQBYuSebrOzpXO2BB-PySTsRw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=iXa19d)
+
 
 
 ---
 
 ## Capturas de pantalla
 
-| Pantalla | Descripción |
-|-----------|--------------|
-| ![Login Screen](assets/screens/pantalla_login.png) | Pantalla inicial de Login |
-| ![Tabs Screen](assets/screens/pantalla_menu.png) | Menú principal con pestañas |
-| ![Modal Screen](assets/screens/pantalla_modal.png) | Pantalla de Modal |
+| Pantalla        | Descripción                          |
+|-----------------|--------------------------------------|
+| ![Login Screen](assets/images/screens/pantalla_login.png) | Pantalla inicial de Login |
+| ![Tabs Screen](assets/images/screens/pantalla_menu.png)   | Menú principal con pestañas |
+| ![Modal Screen](assets/images/screens/pantalla_modal.png) | Pantalla de Modal |
+
 
 ---
 
