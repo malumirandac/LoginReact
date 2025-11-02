@@ -1,50 +1,127 @@
-# Welcome to your Expo app 👋
+# LoginReact
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Aplicación desarrollada con **React Native y Expo** que implementa un sistema básico de **inicio de sesión (Login)** con validación de credenciales, interfaz moderna y navegación estructurada.  
+El proyecto forma parte de una evaluación académica de la asignatura **Desarrollo de Aplicaciones Móviles** del **Instituto Profesional San Sebastián**.
 
-## Get started
+---
 
-1. Install dependencies
+## 🚀 Características principales
 
-   ```bash
-   npm install
-   ```
+- Pantalla de **login funcional** con validación local de usuario y contraseña.  
+- Diseño adaptable a **plataformas web y móviles** (Expo Web / Android).  
+- Navegación estructurada mediante **Expo Router**.  
+- Manejo de autenticación con **Context API**.  
+- Estilos personalizados con `StyleSheet` (borde dinámico, colores y diseño centrado).  
+- Compatible con el flujo de trabajo de **Expo CLI** y **VS Code**.
 
-2. Start the app
+---
 
-   ```bash
-   npx expo start
-   ```
+## 🧩 Tecnologías utilizadas
 
-In the output, you'll find options to open the app in a
+| Tecnología | Uso principal |
+|-------------|----------------|
+| **React Native** | Framework base para la app móvil |
+| **Expo** | Entorno de desarrollo y ejecución multiplataforma |
+| **TypeScript** | Tipado estático para componentes y funciones |
+| **React Navigation (Expo Router)** | Navegación entre pantallas |
+| **Context API** | Manejo de sesión (login/logout) |
+| **Git & GitHub** | Control de versiones y repositorio remoto |
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+---
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## 🗂️ Estructura del proyecto
 
-## Get a fresh project
+EVA1/
+│
+├── app/
+│   ├── (tabs)/               # Pantallas con navegación tipo tabs
+│   │   ├── _layout.tsx       # Layout principal de pestañas
+│   │   ├── index.tsx         # Pantalla principal
+│   │   └── explore.tsx       # Pantalla secundaria
+│   │
+│   ├── _layout.tsx           # Layout global de la app
+│   ├── login.tsx             # Pantalla de Login
+│   ├── modal.tsx             # Pantalla Modal
+│
+├── components/               # Componentes reutilizables (UI)
+├── constants/                # Colores, temas, variables globales
+├── assets/                   # Imágenes y recursos estáticos
+├── scripts/                  # Scripts adicionales
+│
+├── package.json              # Dependencias y configuración
+├── app.json                  # Configuración de Expo
+├── tsconfig.json             # Configuración de TypeScript
+└── README.md                 # Este documento
 
-When you're ready, run:
+---
 
-```bash
-npm run reset-project
-```
+## ⚙️ Instalación y ejecución
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 1️⃣ Clonar el repositorio
+git clone https://github.com/malumirandac/LoginReact.git
+cd LoginReact
 
-## Learn more
+### 2️⃣ Instalar dependencias
+npm install
 
-To learn more about developing your project with Expo, look at the following resources:
+### 3️⃣ Iniciar la aplicación
+npx expo start
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Esto abrirá el panel de Expo en tu navegador.  
 
-## Join the community
+Desde ahí puedes:
+- Presionar **w** para ejecutar la app en modo **web**.  
+- Presionar **a** para abrirla en un emulador o dispositivo **Android** (si tienes Android Studio configurado).
 
-Join our community of developers creating universal apps.
+---
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## 🧠 Credenciales de prueba
+
+Usuario | Contraseña
+---------|------------
+user | 1234
+admin | admin
+
+---
+
+## 🧩 Lógica principal
+
+- Las credenciales se validan en memoria mediante un arreglo `EXPECTED_USERS`.  
+- Si los datos son correctos, se actualiza el contexto global (`AuthContext`) con la información del usuario.  
+- En caso de error, se muestra una alerta nativa (`Alert.alert` en móvil o `window.alert` en web).  
+
+---
+
+## 🎨 Estilos
+
+- Implementados con **StyleSheet**.  
+- Borde de input personalizable (rosa/morado según estado).  
+- Botones con color destacado `#ff00f2ff` y texto blanco.  
+- Fuentes limpias y centrado de elementos.
+
+---
+
+## 🧰 Scripts útiles
+
+Comando | Descripción
+---------|-------------
+npm start | Inicia el servidor de desarrollo de Expo
+npm run web | Ejecuta la app en el navegador
+npm run android | Ejecuta la app en Android (requiere emulador)
+git push | Sube los cambios a GitHub
+
+---
+
+## 🧾 Autor
+
+**Malú Miranda Cortés**  
+Estudiante del **Instituto Profesional San Sebastián**  
+Carrera: *Ingeniería en Informática*  
+Asignatura: *Desarrollo de Aplicaciones Móviles*
+
+---
+
+## 📄 Licencia
+
+Este proyecto se distribuye con fines educativos.  
+El código puede ser reutilizado o modificado con fines académicos o de aprendizaje.
