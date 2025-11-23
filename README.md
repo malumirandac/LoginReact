@@ -180,6 +180,12 @@ Asignatura: *Desarrollo de Aplicaciones Móviles*
 
 ---
 
+## Colaboradores
+
+Este proyecto ha sido clonado y revisado como parte de un trabajo colaborativo en equipo para la evaluación de Aplicaciones Móviles.
+
+---
+
 ## Licencia
 
 Este proyecto se distribuye con fines educativos.  
