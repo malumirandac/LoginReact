@@ -1,6 +1,7 @@
 # LoginReact
 
 Aplicación desarrollada con **React Native y Expo** que implementa un sistema básico de **inicio de sesión (Login)** con validación de credenciales, interfaz moderna y navegación estructurada.  
+Además, contempla un módulo de **To Do List** donde cada tarea puede incluir **imagen** y **georeferencia**.
 El proyecto forma parte de una evaluación académica de la asignatura **Desarrollo de Aplicaciones Móviles** del **Instituto Profesional San Sebastián**.
 
 ---
@@ -8,6 +9,11 @@ El proyecto forma parte de una evaluación académica de la asignatura **Desarro
 ## Características principales
 
 - Pantalla de **login funcional** con validación local de usuario y contraseña.  
+- **To Do List**
+    - Creación de tareas con título
+    - Posibilidad de **adjuntar una foto** tomada con la cámara
+    - Obtención de la **ubicación actual** del dispositivo (georreferencia) para asociarla a la tarea
+    - Visualización de las tareas en una lista
 - Diseño adaptable a **plataformas web y móviles** (Expo Web / Android).  
 - Navegación estructurada mediante **Expo Router**.  
 - Manejo de autenticación con **Context API**.  
@@ -25,8 +31,39 @@ El proyecto forma parte de una evaluación académica de la asignatura **Desarro
 | **TypeScript** | Tipado estático para componentes y funciones |
 | **React Navigation (Expo Router)** | Navegación entre pantallas |
 | **Context API** | Manejo de sesión (login/logout) |
+| **expo-image-picker** | Captura de imagen para las tareas |
+| **expo-location** | Obtención de la ubicación del dispositi |
 | **Git & GitHub** | Control de versiones y repositorio remoto |
 | **Android Studio + Emulador** | Pruebas en entorno Android virtual |
+
+---
+
+---
+
+## Módulo To Do List: imagen + georreferencia
+
+El módulo de tareas incorpora funcionalidades multimedia y de ubicación:
+
+### Flujo de uso
+
+1. El usuario inicia sesión en la aplicación.
+2. Accede a la pestaña del **To Do List**.
+3. Para crear una nueva tarea:
+   - Ingresa el **título** de la tarea.
+   - (Opcional) Toma una **foto** con la cámara o elige una imagen desde la galería mediante `expo-image-picker`.
+   - (Opcional) Solicita la **ubicación actual**; la app pide permiso y obtiene las coordenadas mediante `expo-location`.
+4. La tarea se guarda en memoria junto a:
+   - `id` único.
+   - `title`.
+   - `completed` (estado).
+   - `imageUri` (cuando se adjunta foto).
+   - `location` (latitud / longitud cuando se autoriza la geolocalización).
+
+### Permisos
+
+- En la primera vez que se utiliza la cámara/galería, la app solicita permisos a través de **`expo-image-picker`**.
+- Para la georreferencia, la app solicita permisos de ubicación mediante **`expo-location`**.
+- Si el usuario deniega los permisos, la app muestra mensajes informativos y la funcionalidad asociada (foto o ubicación) se desactiva para esa operación.
 
 ---
 
@@ -39,15 +76,19 @@ EVA1/
       _layout.tsx           # Layout principal de pestañas
       index.tsx             # Pantalla principal
       explore.tsx           # Pantalla secundaria
+      profile.tsx           # Pantalla de perfil / To Do List
 
     _layout.tsx             # Layout global de la app
     login.tsx               # Pantalla de Login
     modal.tsx               # Pantalla Modal
 
   components/               # Componentes reutilizables (UI)
+      ui/                   # Botones, items de lista, etc.
+
   constants/                # Colores, temas, variables globales
   assets/                   # Imágenes y recursos estáticos
   scripts/                  # Scripts adicionales
+  utils/                    # Funciones auxiliares (por ejemplo, generación de IDs)
 
   package.json              # Dependencias y configuración
   app.json                  # Configuración de Expo
@@ -136,6 +177,7 @@ boris | boris123
 - Borde de input personalizable (rosa/morado según estado).  
 - Botones con color destacado `#ff00f2ff` y texto blanco.  
 - Fuentes limpias y centrado de elementos.
+- Estilos específicos para indicadores de tareas completadas y botones de acción.
 
 ---
 
@@ -143,7 +185,7 @@ boris | boris123
 
 Puedes ver el funcionamiento de la aplicación en el siguiente video:
 
-[Ver video de demostración](https://ipciisa-my.sharepoint.com/:v:/g/personal/francisca_miranda_cortes_estudiante_ipss_cl/EYnT2TJHjoZEtYa0nkH6pCQBYuSebrOzpXO2BB-PySTsRw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=iXa19d)
+[Ver video de demostración](https://ipciisa-my.sharepoint.com/:v:/g/personal/francisca_miranda_cortes_estudiante_ipss_cl/IQA8LVcn7NmpQrLzisZoKxOMAbRomMy2_Wpgy3dMuigHOhw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=c8D1IA)
 
 
 
@@ -171,18 +213,12 @@ git push | Sube los cambios a GitHub
 
 ---
 
-## Autor
+## Autores
 
-**Malú Miranda Cortés**  
+**Malú Miranda Cortés, Matías Marques Ferrada**  
 Estudiante del **Instituto Profesional San Sebastián**  
 Carrera: *Ingeniería en Informática*  
 Asignatura: *Desarrollo de Aplicaciones Móviles*
-
----
-
-## Colaboradores
-
-Este proyecto ha sido clonado y revisado como parte de un trabajo colaborativo en equipo para la evaluación de Aplicaciones Móviles.
 
 ---
 
