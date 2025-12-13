@@ -1,17 +1,15 @@
 import { useAuth } from "@/components/context/auth-context";
+import Button from "@/components/ui/button";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, StyleSheet, Text, TextInput, View } from 'react-native';
 
 
 export default function LoginScreen() {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
-    //la herramienta exporouter nos permitirá acceder a los tab una vez hecho el login exitoso
+    const { login, loading } = useAuth();
     const router = useRouter();
-    //logica con authProvider
-    const { login } = useAuth();
-
 
     const handleUsernameChange = (text: string) => {
         setUsername(text);
@@ -21,37 +19,12 @@ export default function LoginScreen() {
         setPassword(text);
     }
 
-
-    //handleLogin con lógica de credenciales simples, sin authtProvider
-    /* const handleLogin = () => {
-        const EXPECTED_USER = {
-            username: "user",
-            password: "1234"
-        }
-
-        if (username === EXPECTED_USER.username && password === EXPECTED_USER.password){
-            //en versión web usaremos el window.alert
-            window.alert(`Login successful\nWelcome, ${username}!`);
-            //en versión nativo usaremos Alert.alert
-            //Alert.alert("Login successful", `Welcome, ${username}!`);
-            router.replace("/(tabs)");
-            //utilizamos replace en lugar de navigate para que al devolvernos en la navegación, no nos devuelva al login sino que al menu principal
-        } else {
-            //en versión web usaremos el window.alert
-            window.alert("Login failed\nInvalid username or password");
-            //en versión nativo usaremos Alert.alert
-            //Alert.alert("Login failed", "Invalid username or password");
-        }
-    } */
-
-    //handleLogin con lógica de authProvider 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         try {
-            login(username, password);
-            router.replace("/(tabs)");
+            await login(username, password);
+            router.replace('/(tabs)');
         } catch (error) {
-            //Alert.alert("Login Failed", (error as Error).message);
-            window.alert("Login failed\nInvalid username or password");
+            Alert.alert("Login Failed", (error as Error).message);
         }
     }
     
@@ -60,10 +33,10 @@ export default function LoginScreen() {
         <View style={styles.container}>
             <Text>L O G I N</Text>
             <View style={styles.inputContainer}>
-                <Text style={styles.label}>Username</Text>
+                <Text style={styles.label}>Email</Text>
                 <TextInput 
                 style={styles.input} 
-                placeholder="Enter username" 
+                placeholder="Enter email" 
                 onChangeText={handleUsernameChange} 
                 />
             </View>
@@ -76,15 +49,17 @@ export default function LoginScreen() {
                 onChangeText={handlePasswordChange}
                 />
             </View>
-            <Pressable style={styles.button} onPress={handleLogin}>
-                <Text style={styles.buttonText}>Login</Text>
-            </Pressable>
+            <Button 
+                style={styles.button} 
+                onPress={handleLogin} 
+                disabled={!username || !password} 
+                loading={loading} 
+                text="Login" 
+            />
         </View>
     )
 }
 
-
-//estilos
 const styles = StyleSheet.create({
     container: {
         flex: 1,

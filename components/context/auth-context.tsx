@@ -1,56 +1,62 @@
+import getAuthService from "@/services/auth-service";
 import { createContext, useContext, useState } from "react";
-//import { Alert } from "react-native";
+import { Alert } from "react-native";
 
 interface User {
-    id: string;
-    name: string;
+    id: string
+    email: string
+    token: string
 }
 
-//tenemos una interfaz(tipo de dato) de typescript
 interface AuthContextProps {
     user: User | null;
     login: (username: string, password: string) => void;
     logout: () => void;
+    loading: boolean;
 }
 
-//indicamos un arreglo de posibles usuarios
-const EXPECTED_USERS = [
-    { id: '1', name: 'user', password: '1234'},
-    { id: '2', name: 'admin', password: 'admin'},
-    { id: '3', name: 'malu', password: 'malu123'},
-    { id: '4', name: 'boris', password: 'boris123'},
-]
-
-//este es el estado inicial del contexto, donde se indica que tendrá una interfaz AuthContextProps o nada
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
-//creamos función para manejar el prop children
-//AuthProvider es un componente
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null)
+    const [loading, setLoading] = useState<boolean>(false);
 
-    const login = (username: string, password: string) => {
-        const foundUser = EXPECTED_USERS.find( u => u.name === username && u.password === password);
-    
-        if (foundUser) {
-            setUser({ id: foundUser.id, name: foundUser.name });
-        } else {
-            throw new Error("Login Failed: Invalid username or password");
-        }
+    const login = async (username: string, password: string) => {
+    const authClient = getAuthService()
+
+    setLoading(true);
+
+    try {
+        const loginResponse = await authClient.login({ email: username, password: password });
+        const token = loginResponse.data.token;
+
+        // Guarda un user mínimo para el contexto
+        setUser({ id: '', email: username, token });
+
+        console.log("Login successful, token:", token);
+
+        Alert.alert("Login Successful", "Te has logueado correctamente.");
+
+        return token;
+    } catch (error) {
+        Alert.alert("Login Failed", (error as Error).message);
+        throw error;
+    } finally {
+        setLoading(false);
     }
+}
 
     const logout = () => {
         setUser(null);
     }
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ user, login, logout, loading }}>
             {children}
         </AuthContext.Provider>
     )
 }
 
-//utilizamos un hook
 export function useAuth() {
     const context = useContext(AuthContext)
 
