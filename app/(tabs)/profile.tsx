@@ -3,7 +3,6 @@ import { useAuth } from '@/components/context/auth-context';
 import { useRouter } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-//Esta vista es el menú principal de la aplicación
 export default function ProfileScreen() {
   const { user, logout } = useAuth();
   const router = useRouter();
@@ -16,9 +15,7 @@ const handleLogout = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>Hello, World!</Text>
-      <Text> Bienvenido, {user?.name}</Text>
-  
-
+      <Text> Bienvenido, {user?.email || 'User'}!</Text>
         <Pressable style={styles.button} onPress={handleLogout}>
           <Text style={styles.buttonText}>Logout</Text>
         </Pressable>

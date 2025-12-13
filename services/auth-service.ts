@@ -24,17 +24,27 @@ export default function getAuthService() {
 
     async function login(loginPayload: LoginPayload): Promise<LoginResponse> {
         try {
+                console.log("auth-service: API_URL =", API_URL);
             const response = await client.post<LoginResponse>("/login", loginPayload)
             return response.data
         } catch (error) {
-            if (isAxiosError(error) && error.response) {
-                if (error.response.status === 401) {
-                    throw new Error("Credenciales invalidas. Por favor, verifica tu usuario y contraseña.");
-                } 
+    console.log("auth-service: API_URL =", API_URL);
+    if (isAxiosError(error)) {
+        console.log("auth-service: axios error message =", error.message);
+        if (error.response) {
+            console.log("auth-service: response status =", error.response.status);
+            console.log("auth-service: response data =", error.response.data);
+            if (error.response.status === 401) {
+                throw new Error("Credenciales invalidas. Por favor, verifica tu usuario y contraseña.");
             }
-            console.log("error al iniciar sesión");
-            throw new Error("Error al conectar con el servidor, por favor intenta nuevamente mas tarde.");
+        } else if (error.request) {
+            console.log("auth-service: no response received, request =", error.request);
         }
+    } else {
+        console.log("auth-service: non-axios error =", error);
+    }
+    throw new Error("Error al conectar con el servidor, por favor intenta nuevamente mas tarde.");
+}
     }
 
     async function register(registerPayload: RegisterPayload): Promise<RegisterResponse> {

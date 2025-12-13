@@ -1,6 +1,8 @@
 import getAuthService from "@/services/auth-service";
-import { createContext, useContext, useState } from "react";
-import { Alert } from "react-native";
+import { clearSessionFromStorage, loadSessionFromStorage, saveSessionToStorage } from "@/utils/storage";
+import { router } from "expo-router";
+import { decodeJwt } from "jose";
+import { createContext, useContext, useEffect, useState } from "react";
 
 interface User {
     id: string
@@ -8,9 +10,14 @@ interface User {
     token: string
 }
 
+export interface JwtPayload {
+    sub: string;
+    email: string;
+}
+
 interface AuthContextProps {
     user: User | null;
-    login: (username: string, password: string) => void;
+    login: (username: string, password: string) => Promise<string | void>;
     logout: () => void;
     loading: boolean;
 }
@@ -21,6 +28,22 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     const [user, setUser] = useState<User | null>(null)
     const [loading, setLoading] = useState<boolean>(false);
 
+    useEffect(() => {
+        loadSessionFromStorage()
+        .then((loadedUser) => {
+            if (loadedUser) {
+                setUser(loadedUser);
+            }       
+        });
+    }, []); 
+
+    useEffect(() => {
+        if (user) {
+            router.replace("/(tabs)");
+        }
+    }, [user]); 
+
+
     const login = async (username: string, password: string) => {
     const authClient = getAuthService()
 
@@ -29,17 +52,20 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     try {
         const loginResponse = await authClient.login({ email: username, password: password });
         const token = loginResponse.data.token;
+        const decodedToken = decodeJwt<JwtPayload>(token);
 
-        // Guarda un user mínimo para el contexto
-        setUser({ id: '', email: username, token });
+        const loggedInUser: User = {
+            id: decodedToken.sub,
+            email: decodedToken.email,
+            token,
+        }
 
-        console.log("Login successful, token:", token);
-
-        Alert.alert("Login Successful", "Te has logueado correctamente.");
+        setUser(loggedInUser);
+        await saveSessionToStorage(loggedInUser);
 
         return token;
     } catch (error) {
-        Alert.alert("Login Failed", (error as Error).message);
+        
         throw error;
     } finally {
         setLoading(false);
@@ -48,6 +74,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
     const logout = () => {
         setUser(null);
+        clearSessionFromStorage();
     }
 
     return (
