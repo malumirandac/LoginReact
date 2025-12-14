@@ -1,6 +1,6 @@
 # LoginReact
 
-Aplicación desarrollada con **React Native y Expo** que implementa un sistema básico de **inicio de sesión (Login)** con validación de credenciales, interfaz moderna y navegación estructurada.  
+Aplicación desarrollada con **React Native y Expo** que implementa un sistema básico de **inicio de sesión (Login)** con validación de credenciales conectado a una API externa que integra un flujo de frontend-backend mediante el uso de **tokens JWT** utilizando una interfaz moderna y navegación estructurada.  
 Además, contempla un módulo de **To Do List** donde cada tarea puede incluir **imagen** y **georeferencia**.
 El proyecto forma parte de una evaluación académica de la asignatura **Desarrollo de Aplicaciones Móviles** del **Instituto Profesional San Sebastián**.
 
@@ -15,8 +15,7 @@ El proyecto forma parte de una evaluación académica de la asignatura **Desarro
     - Obtención de la **ubicación actual** del dispositivo (georreferencia) para asociarla a la tarea
     - Visualización de las tareas en una lista
 - Diseño adaptable a **plataformas web y móviles** (Expo Web / Android).  
-- Navegación estructurada mediante **Expo Router**.  
-- Manejo de autenticación con **Context API**.  
+- Navegación estructurada mediante **Expo Router**.    
 - Estilos personalizados con `StyleSheet` (borde dinámico, colores y diseño centrado).  
 - Compatible con el flujo de trabajo de **Expo CLI**, **Android Studio** y **VS Code**.
 
@@ -38,16 +37,37 @@ El proyecto forma parte de una evaluación académica de la asignatura **Desarro
 
 ---
 
+## API utilizada
+
+El frontend se conecta a la siguiente API: https://todo-list.dobleb.cl/
+
+Esta API fue desarrollada y desplegada sobre Cloudflare Workers, utilizando Cloudflare D1 como base de datos y Cloudflare R2 para almacenamiento de archivos.
+
+## Pruebas de la API
+
+Antes de integrar el frontend, la API fue probada utilizando Swagger (OpenApi) https://todo-list.dobleb.cl/docs , lo que permitió:
+- Verificar correctamente los endpoints disponibles
+- Probar el registro y login de usuarios
+- Validar respuestas y manejo de errores
+- Confirmar la generación y uso de tokens JWT
+
+Swagger facilitó la validación del contrato entre el frontend y el backend antes de la integración final
+
 ---
 
-## Módulo To Do List: imagen + georreferencia
+## Autenticación y seguridad
 
-El módulo de tareas incorpora funcionalidades multimedia y de ubicación:
+La comunicación entre el frontend y la API se realiza mediante tokens JWT, los cuales:
+- Se obtienen al iniciar sesión correctamente
+- Se envían en las solicitudes protegidas al backend
+- Permiten autenticar al usuario sin exponer credenciales sensibles
+
+---
 
 ### Flujo de uso
 
 1. El usuario inicia sesión en la aplicación.
-2. Accede a la pestaña del **To Do List**.
+2. Accede a la pestaña de **To Do List**.
 3. Para crear una nueva tarea:
    - Ingresa el **título** de la tarea.
    - (Opcional) Toma una **foto** con la cámara o elige una imagen desde la galería mediante `expo-image-picker`.
@@ -61,7 +81,7 @@ El módulo de tareas incorpora funcionalidades multimedia y de ubicación:
 
 ### Permisos
 
-- En la primera vez que se utiliza la cámara/galería, la app solicita permisos a través de **`expo-image-picker`**.
+- Cuando se utiliza la cámara por primera vez, la app solicita permisos a través de **`expo-image-picker`**.
 - Para la georreferencia, la app solicita permisos de ubicación mediante **`expo-location`**.
 - Si el usuario deniega los permisos, la app muestra mensajes informativos y la funcionalidad asociada (foto o ubicación) se desactiva para esa operación.
 
@@ -80,16 +100,30 @@ EVA1/
 
     _layout.tsx             # Layout global de la app
     login.tsx               # Pantalla de Login
-    modal.tsx               # Pantalla Modal
 
   components/               # Componentes reutilizables (UI)
-      ui/                   # Botones, items de lista, etc.
+      context/              # Contextos globales de la aplicación (estado compartido)
+        auth-context.tsx/   # Contexto de autenticación (usuario, token, login/logout)
+
+      ui/                   # Componentes UI reutilizables
+
+      external-link.tsx     # Componente para abrir enlaces externos de forma segura
+      haptic-tab.tsx        # Componente de tab con feedback háptico
+      new-task.tsx          # Componente para crear una nueva tarea
+      task-item.tsx         # Componente que representa una tarea individual
 
   constants/                # Colores, temas, variables globales
   assets/                   # Imágenes y recursos estáticos
   scripts/                  # Scripts adicionales
+  services/                 # Capa de servicios para comunicación con la API
+    auth-service.ts         # Funciones de autenticación (login, register, manejo de errores)
+    todo-service.ts         # Funciones CRUD para tareas (crear, listar, eliminar)
+
   utils/                    # Funciones auxiliares (por ejemplo, generación de IDs)
 
+  env.example               # Ejemplo de variables de entorno requeridas por la app
+  env.local                 # Variables de entorno locales (no versionadas)
+  config.ts                 # Configuración global de la aplicación (API URL, constantes)
   package.json              # Dependencias y configuración
   app.json                  # Configuración de Expo
   tsconfig.json             # Configuración de TypeScript
@@ -121,6 +155,14 @@ Esto abrirá el panel de **Expo** en tu navegador.
 Desde ahí puedes:
 - Presionar **w** para ejecutar la app en modo **web**.  
 - Presionar **a** para abrirla en un emulador o dispositivo **Android** (si tienes Android Studio configurado).
+
+## Otras dependencias:
+```bash
+npm install axios jose
+```
+
+- axios se utiliza para realizar solicitudes HTTP a la API y facilita el manejo de headers, respuestas y errores
+- jose se utiliza para el manejo y la validación de JWT y permite decodificar y trabajar con tokens de forma segura en el frontend
 
 ---
 
@@ -156,20 +198,13 @@ Esto lanza la aplicación automáticamente dentro del entorno Android virtual.
 
 Usuario | Contraseña
 ---------|------------
-user | 1234
-admin | admin
-malu | malu123
-boris | boris123
+hola@mail.com | 123456
+chao@mail.com | 123456
+
+Estas credenciales se crearon mediante Swagger
 
 ---
 
-## Lógica principal
-
-- Las credenciales se validan en memoria mediante un arreglo `EXPECTED_USERS`.  
-- Si los datos son correctos, se actualiza el contexto global (`AuthContext`) con la información del usuario.  
-- En caso de error, se muestra una alerta nativa (`Alert.alert` en móvil o `window.alert` en web).  
-
----
 
 ## Estilos
 
@@ -185,7 +220,7 @@ boris | boris123
 
 Puedes ver el funcionamiento de la aplicación en el siguiente video:
 
-[Ver video de demostración](https://ipciisa-my.sharepoint.com/:v:/g/personal/francisca_miranda_cortes_estudiante_ipss_cl/IQA8LVcn7NmpQrLzisZoKxOMAbRomMy2_Wpgy3dMuigHOhw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=c8D1IA)
+[Ver video de demostración](https://ipciisa-my.sharepoint.com/:v:/g/personal/francisca_miranda_cortes_estudiante_ipss_cl/IQAmT0WuDBP5RKSGkJZsYKz6AXrgcHTIfV2I4HiiZLml5qU?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=JgHW7o)
 
 
 
@@ -195,9 +230,11 @@ Puedes ver el funcionamiento de la aplicación en el siguiente video:
 
 | Pantalla        | Descripción                          |
 |-----------------|--------------------------------------|
-| ![Login Screen](assets/images/screens/pantalla_login.png) | Pantalla inicial de Login |
-| ![Tabs Screen](assets/images/screens/pantalla_menu.png)   | Menú principal con pestañas |
-| ![Modal Screen](assets/images/screens/pantalla_modal.png) | Pantalla de Modal |
+| ![Login Screen](assets/images/screens/pantalla_login.png) | Pantalla de Login |
+| ![Tabs Screen](assets/images/screens/pantalla_inicio.png) | Pantalla de Inicio |
+| ![Modal Screen](assets/images/screens/pantalla_todolist.png) | Pantalla de To Do List |
+| ![Modal Screen](assets/images/screens/pantalla_crear_tarea.png) | Pantalla Crear Tarea |
+| ![Modal Screen](assets/images/screens/pantalla_login_failed.png) | Pantalla Error Login |
 
 
 ---
