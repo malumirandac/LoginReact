@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 export default function TabTwoScreen() {
   return (
     <View style={styles.container}>
-      <Text> Tab Two</Text>
+      <Text> La importancia de hacer las tareas</Text>
     </View>
   );
 }

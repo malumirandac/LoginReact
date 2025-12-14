@@ -24,7 +24,6 @@ export default function getAuthService() {
 
     async function login(loginPayload: LoginPayload): Promise<LoginResponse> {
         try {
-                console.log("auth-service: API_URL =", API_URL);
             const response = await client.post<LoginResponse>("/login", loginPayload)
             return response.data
         } catch (error) {

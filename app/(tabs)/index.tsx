@@ -1,41 +1,61 @@
+import { useAuth } from '@/components/context/auth-context';
 import NewTask from '@/components/new-task';
 import TaskItem from '@/components/task-item';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import Title from '@/components/ui/title';
 import { Task } from '@/constants/types';
-import { generateRandomId } from '@/utils/generate-random-id';
-import { useState } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import getTodoService from '@/services/todo-service';
+import { useCallback, useEffect, useState } from 'react';
+import { Alert, StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const initialTodos = [
-  { id: generateRandomId(), title: 'comprar leche', completed: false },
-  { id: generateRandomId(), title: 'hacer examen', completed: true },
-  { id: generateRandomId(), title: 'sacar al perro', completed: false },
-  { id: generateRandomId(), title: 'comprar huevo', completed: true },
-]
 
 export default function HomeScreen() {
-  const [todos, setTodos] = useState<Task[]>(initialTodos);
-  const [creatingNew, setCreatingNew] = useState<boolean>(false);
+  const { user } = useAuth();
+  const [todos, setTodos] = useState<Task[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
+  const [creatingNew, setCreatingNew] = useState<boolean>(false)
+
+  const fetchTodos = useCallback(async () => {
+    if (!user) return;
+    setLoading(true);
+    try {
+      const todoService = getTodoService({ token: user.token });
+      const response = await todoService.getTodos();
+      setTodos(response.data);
+    } catch (error) {
+      Alert.alert("Error", (error as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  }, [user]);
+
+  useEffect(() => { 
+    if (user) {
+      fetchTodos();
+    }
+  }, [user, fetchTodos]);
+  
 
   const createTask = (task: Task) => {
     if (task.title.trim().length === 0) return;
-
-    setTodos(prevTodos => [...prevTodos, task]);
+    setTodos((prevTodos) => { 
+      const newTodos = [...prevTodos, task];
+      return newTodos;
+     });
     setCreatingNew(false);
   }
 
   const toggleTodo = (id: string) => {
-    setTodos(prevTodos =>
-      prevTodos.map(todo =>
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) =>
         todo.id === id ? { ...todo, completed: !todo.completed } : todo
       )
-    )
-  }
+    );
+  };
 
   const removeTodo = (id: string) => {
-    setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
+    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
   }
 
   const handleNewTaskClose = () => {
@@ -55,10 +75,11 @@ export default function HomeScreen() {
       <Title>
         To Do List
       </Title>
-      {todos.map((todo) => (
+      {loading && <Title>Loading...</Title>}
+      {todos.map((task) => (
         <TaskItem 
-        key={todo.id} 
-        task={todo} 
+        key={task.id} 
+        task={task} 
         onToggle={toggleTodo}
         onRemove={removeTodo}
         />
