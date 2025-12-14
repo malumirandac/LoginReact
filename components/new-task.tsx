@@ -1,5 +1,6 @@
 import { useAuth } from "@/components/context/auth-context";
 import { Task } from "@/constants/types";
+import getTodoService from '@/services/todo-service';
 import { launchCameraAsync, requestCameraPermissionsAsync } from "expo-image-picker";
 import { Accuracy, getCurrentPositionAsync, requestForegroundPermissionsAsync } from "expo-location";
 import { useState } from "react";
@@ -9,16 +10,15 @@ import Title from "./ui/title";
 
 interface NewTaskProps{
     onClose: () => void;
-    onTaskSave: (task: Task) => void;
+    onTaskCreated: () => void;
 }
 
-export default function NewTask({ onClose, onTaskSave }: NewTaskProps) {
-    const { user } = useAuth();
-    
+export default function NewTask({ onClose, onTaskCreated }: NewTaskProps) {
     const [photoUri, setPhotoUri] = useState<string | null>(null)
     const [taskTitle, setTaskTitle] = useState<string>("")
     const [isCapturingPhoto, setIsCapturingPhoto] = useState<boolean>(false)
     const [isSaving, setIsSaving] = useState<boolean>(false)
+    const { user } = useAuth();
 
     async function handleTakePhoto() {
         if (isCapturingPhoto) return
@@ -73,7 +73,7 @@ export default function NewTask({ onClose, onTaskSave }: NewTaskProps) {
                         latitude: Number(locationResult.coords.latitude.toFixed(6)),
                         longitude: Number(locationResult.coords.longitude.toFixed(6)),
                     }
-                 }
+            }
             } catch (locationError) {
             console.error("Error obtaining location:", locationError);
         }
@@ -86,7 +86,9 @@ export default function NewTask({ onClose, onTaskSave }: NewTaskProps) {
             location: location || undefined,
             userId: user ? user.id : "",
         };
-        onTaskSave(newTask);
+        const todoService = getTodoService({ token: user!.token });
+        await todoService.createTodo(newTask);
+        onTaskCreated();
         } catch (error) {
             console.error("Error guardando la tarea:", error);
             Alert.alert("Error,", "No se pudo guardar la tarea. Intente de nuevo.");
