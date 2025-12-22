@@ -1,6 +1,8 @@
 import { useAuth } from "@/components/context/auth-context";
 import { Task } from "@/constants/types";
+import getImageUploadService from "@/services/image-upload-service";
 import getTodoService from '@/services/todo-service';
+import * as ImageManipulator from 'expo-image-manipulator';
 import { launchCameraAsync, requestCameraPermissionsAsync } from "expo-image-picker";
 import { Accuracy, getCurrentPositionAsync, requestForegroundPermissionsAsync } from "expo-location";
 import { useState } from "react";
@@ -23,36 +25,65 @@ export default function NewTask({ onClose, onTaskCreated }: NewTaskProps) {
     async function handleTakePhoto() {
         if (isCapturingPhoto) return
 
+
+
         try {
-            setIsCapturingPhoto(true);
+    setIsCapturingPhoto(true);
 
-            const { status } = await requestCameraPermissionsAsync()
+    const { status } = await requestCameraPermissionsAsync()
 
-            if (status !== 'granted') {
-                Alert.alert("Permiso denegado", "No se pudo obtener permiso para acceder a la cámara");
-                setIsCapturingPhoto(false);
-                return;
-            }
+    if (status !== 'granted') {
+        Alert.alert("Permiso denegado", "No se pudo obtener permiso para acceder a la cámara");
+        setIsCapturingPhoto(false);
+        return;
+    }
 
-            const result = await launchCameraAsync({
-                mediaTypes: ['images'],
-                quality: 0.7,
-                allowsEditing: false,
-                exif: false
-            })
+    const result = await launchCameraAsync({
+        mediaTypes: ['images'],
+        quality: 0.9,
+        allowsEditing: false,
+        exif: false
+    })
 
-            if (!result.canceled && result.assets.length > 0) {
-                setPhotoUri(result.assets[0].uri);
-            }
+    if (!result.canceled && result.assets.length > 0) {
+        const picked = result.assets[0];
 
+        // Reduce/comprime la imagen para evitar 413
+        const manipulated = await ImageManipulator.manipulateAsync(
+            picked.uri,
+            [{ resize: { width: 1280 } }], // ajustar según necesidades
+            { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG }
+        );
 
-        } catch (error) {
-            console.error("Error taking photo:", error);
-            Alert.alert("Error", "No se pudo tomar la foto. Intente de nuevo");
-        } 
-        finally {
-            setIsCapturingPhoto(false);
+        const uploadService = getImageUploadService({ token: user!.token });
+        const formData = new FormData();
+        formData.append('image', {
+            uri: manipulated.uri,
+            name: `photo.jpg`,
+            type: 'image/jpeg',
+        } as any);
+
+        try {
+            const remoteUrl = await uploadService.uploadImage(formData);
+            setPhotoUri(remoteUrl);
+        } catch (srvErr) {
+            console.error("Error uploading photo:", srvErr);
+            const msg = srvErr instanceof Error ? srvErr.message : "No se pudo subir la foto.";
+            Alert.alert("Error", msg);
         }
+    }
+
+} catch (error) {
+    console.error("Error taking photo:", error);
+    const msg = error instanceof Error ? error.message : "No se pudo tomar la foto. Intente de nuevo";
+    Alert.alert("Error", msg);
+} 
+finally {
+    setIsCapturingPhoto(false);
+}
+
+
+
     }
 
     async function handleSaveTask() {
