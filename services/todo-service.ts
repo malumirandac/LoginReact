@@ -16,7 +16,6 @@ export default function getTodoService({ token }: { token: string }) {
         }
     })
 
-
 async function getTodos(): Promise<GetTodosResponse> {
     try {
         const response = await client.get<GetTodosResponse>('/todos');
